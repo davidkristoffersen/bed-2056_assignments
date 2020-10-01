@@ -39,6 +39,12 @@ $ cd assignment-4_web-scraping-timeplan
 $ python3 main.py
 ```
 
+### Assignment 5
+```bash
+$ cd assignment-5_ssb-api
+$ Rscript main.R
+```
+
 ## Info
 
 ### Assignment text
