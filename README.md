@@ -1,5 +1,15 @@
 # bed-2056_assignments
 
+## Requirements
+
+**Cli packages**:
+- python3
+- pip3
+
+**Pip packages**:
+- pandas
+- beautifulsoup4
+
 ## How to run
 
 ### Assignment 3
