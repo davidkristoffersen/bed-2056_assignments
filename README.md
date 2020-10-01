@@ -22,7 +22,10 @@ $ python3 main.py
 ```
 
 ### Assignment 2
-Convert `main.Rmd` into `main.html` in RStudio
+```bash
+$ cd assignment-2_rmd
+$ Rscript main.R
+```
 
 ### Assignment 3
 ```bash
