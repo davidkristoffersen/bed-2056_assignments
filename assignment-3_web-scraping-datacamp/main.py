@@ -2,6 +2,7 @@
 """Datacamp web scraping"""
 
 import csv
+import pandas
 import requests
 from bs4 import BeautifulSoup
 
@@ -38,11 +39,6 @@ def scrape(url, _s):
     return ret
 
 
-def gen_data_frame(language, tech):
-    """Generate data frame"""
-    return {'language': language, 'tech': tech}
-
-
 def get_user_credentials(use_csv):
     """Get user credentials"""
     # Get credentials from csv file
@@ -57,6 +53,13 @@ def get_user_credentials(use_csv):
     print("Password: ", end="")
     password = input()
     return {'username': username, 'password': password}
+
+
+def gen_data_frame(languages, techs):
+    """Generate data frame"""
+    data = {'language': languages, 'tech': techs}
+    return pandas.DataFrame(data, columns=['language', 'tech'])
+
 
 if __name__ == "__main__":
     LOGIN_URL = "https://www.datacamp.com/users/sign_in"
@@ -76,6 +79,7 @@ if __name__ == "__main__":
     # Web scrape r url
     r_tech = scrape(R_URL, session)
 
+    # Generate data frames
+    data_frame = gen_data_frame(['python', 'r'], [python_tech, r_tech])
     # Print data frames
-    print(gen_data_frame('python', python_tech))
-    print(gen_data_frame('r', r_tech))
+    print(data_frame)
