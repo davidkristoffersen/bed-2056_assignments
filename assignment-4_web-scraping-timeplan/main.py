@@ -22,12 +22,16 @@ def scrape(url, _s):
     html = url2html(url, _s)
     soup = html2soup(html)
     # Find div with matching class
-    main = soup.find('div', {'class': 'courses__explore-list js-async-bookmarking row'})
+    weeks = soup.findAll('div', {'class': 'div_week mb-4'})
 
     ret = []
-    # Append all tech names to return list
-    for child in main.findChildren(recursive=False):
-        ret.append(child.find('h4').string)
+    # Append all dates to return list
+    for week in weeks:
+        _tr = week.find('tr', {'class': 'table-primary'})
+        _td = _tr.findNext()
+        # Parse out date from _td
+        date = _td.renderContents().strip().decode('utf-8').split('<br/>')[1]
+        ret.append(date)
     return ret
 
 
