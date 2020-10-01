@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
-from pprint import pprint
 from statistics import mean
-import matplotlib.pyplot as plt
-import urllib.request
+from matplotlib import pyplot as plt
+from urllib.request import urlopen
 
 # Number of lines to remove from the import files
 bottom_strip_lines = 13
@@ -19,7 +18,7 @@ def print_lines(lines):
 
 # Get file by url
 def get_file(url):
-    with urllib.request.urlopen(url) as f:
+    with urlopen(url) as f:
         return f.read().decode('utf-8')
 
 
