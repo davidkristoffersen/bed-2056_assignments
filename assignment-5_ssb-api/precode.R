@@ -25,7 +25,7 @@ rm(list = ls())
 #install.packages("PxWebApiData")
 library(PxWebApiData)
 
-?ApiData
+#?ApiData
 
 county <- ApiData("http://data.ssb.no/api/v0/dataset/95274.json?lang=no", getDataByGET = TRUE)
 
