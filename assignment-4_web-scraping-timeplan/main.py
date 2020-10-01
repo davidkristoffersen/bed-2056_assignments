@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Timeplan web scraping"""
 
+import pandas
 import requests
 from bs4 import BeautifulSoup
 
@@ -30,9 +31,10 @@ def scrape(url, _s):
     return ret
 
 
-def gen_data_frame(data):
+def gen_data_frame(dates):
     """Generate data frame"""
-    return {'data': data}
+    data = {'date': dates}
+    return pandas.DataFrame(data, columns=['date'])
 
 
 if __name__ == "__main__":
