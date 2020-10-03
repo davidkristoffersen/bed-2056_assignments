@@ -116,6 +116,14 @@ with(dframe, table(variable, variable3))
 # recode region
 dframe <- dframe %>% mutate(region = ifelse(region == "Hele landet", "Whole country", region))
 
-mosaic::tally(~region, data = dframe)
-
 # we now have the data in long format ready for data wrangling
+
+dframe <- dframe %>% mutate(region =
+	ifelse(region == "Troms og Finnmark - Romsa ja Finnmárku", "Troms and Finnmark",
+		ifelse(region == "Svalbard", "Svalbard",
+			ifelse(region == "Vestfold og Telemark", "Vestfold and Telemark", region))))
+mosaic::tally(~region, data = dframe)
+room_capacity <- filter(dframe, variable1 == 'roomcap')
+
+# Plot into file 'Rplots.pdf'
+ggplot(room_capacity, aes(x=month, y=value, group=region)) + geom_line(aes(color=region)) + ggtitle("Room capasity for Norway in 2020")
