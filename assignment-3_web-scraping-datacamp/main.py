@@ -57,7 +57,11 @@ def get_user_credentials(use_csv):
 
 def gen_data_frame(languages, techs):
     """Generate data frame"""
-    data = {'language': languages, 'tech': techs}
+    data = {'language': [], 'tech': []}
+    for lang, tech in zip(languages, techs):
+        data['language'] += [lang] * len(tech)
+        data['tech'] += tech
+
     return pandas.DataFrame(data, columns=['language', 'tech'])
 
 
