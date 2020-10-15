@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """Bankcrypties based on covid illustrated"""
 
-import re
 import requests
 from bs4 import BeautifulSoup as bs
 from matplotlib.lines import Line2D
@@ -19,30 +18,6 @@ def html2soup(html):
     return bs(html, "html.parser")
 
 
-def is_county(elem):
-    """Check if county"""
-    tds = elem.find_all('td')
-    if len(tds) == 2:
-        return True, tds[1].text.strip()
-
-    return False, ""
-
-
-def get_date(elem):
-    """Get date"""
-    tds = elem.find_all('td')
-    if len(tds) < 3:
-        return False, ""
-    date = tds[5].text.strip()
-
-    days = {3: 31, 4: 30 + 31, 5: 31 + 31 + 30}
-    day = int(date.split(".")[0])
-    month = int(date.split(".")[1])
-
-    index = days[month] + day
-    return True, index
-
-
 def scrape(url, _s):
     """Web scrape url and generate data frame"""
     html = url2html(url, _s)
@@ -56,25 +31,22 @@ def scrape(url, _s):
     county = ""
 
     for val in table:
-        is_count, count = is_county(val)
-        if is_count:
-            county = count
-            data[county] = {}
+        tds = val.find_all('td')
+        if len(tds) == 2:
+            _c = tds[1].text.strip()
+            if not _c == "Utenlands":
+                county = _c
+                data[county] = [list(range(1, 13)), [-1 for i in range(12)]]
+                continue
+        if len(tds) < 3:
             continue
 
-        is_firm, index = get_date(val)
-        if not is_firm:
-            continue
+        month = int(tds[5].text.strip().split(".")[1])
+        data[county][1][month] += 1
 
-        if  index  not in data[county]:
-            data[county][index] = 0
-
-        data[county][index] += 1
-
-    if "Utenlands" in data:
-        del data["Utenlands"]
-    if "Svalbard" in data:
-        del data["Svalbard"]
+    for key in data:
+        data[key] = [[it, val] for it, val in enumerate(data[key][1]) if not val == -1]
+        data[key] = list(map(list, zip(*data[key])))
 
     return data
 
@@ -87,7 +59,7 @@ def gen_url(_from, _to):
 def get_data():
     """Scrape data from url"""
 
-    url_2019 = gen_url("01.05.2019", "31.05.2019")
+    url_2019 = gen_url("01.03.2019", "31.05.2019")
     url_2020 = gen_url("01.05.2020", "31.05.2020")
 
     # Initialize requests session
@@ -98,34 +70,10 @@ def get_data():
 
     return [data2019, data2020]
 
-    # example_x = list(range(10))
-    # example_y = list(range(0, 20, 2))
-    # example_y2 = list(range(0, 30, 3))
-    # example_y3 = list(range(0, 40, 4))
-    # example_y4 = list(range(0, 50, 5))
-
-    # example_data_2019 = {
-        # "Oslo": [example_x, example_y],
-        # "Rogaland": [example_x, example_y2],
-        # "Møre og Romsdal": [example_x, example_y3],
-        # "Nordland": [example_x, example_y4],
-    # }
-    # example_data_2020 = {
-        # "Oslo": [example_x, example_y4],
-        # "Rogaland": [example_x, example_y3],
-        # "Møre og Romsdal": [example_x, example_y2],
-        # "Nordland": [example_x, example_y],
-    # }
-
-    # return [example_data_2019, example_data_2020]
-
 def plot_graph(data2019, data2020):
     """Plot multi-graph"""
-    cols = 2
-    rows = 2
-    print(data2019)
-    # print(data2020)
-    return
+    cols = 4
+    rows = 3
 
     fig, axes = plt.subplots(rows, cols)
     for i, (key, val) in enumerate(data2019.items()):
@@ -142,9 +90,9 @@ def plot_graph(data2019, data2020):
                       Line2D([0], [0], color="cyan", lw=2, label="2020")]
     plt.legend(handles=legend_handles, loc="upper left")
 
-    plt.suptitle("Commencement of liquidation proceedings of 2020", fontweight="bold")
+    plt.suptitle("Commencement of liquidation proceedings of 2019-2020", fontweight="bold")
     plt.ylabel("Commencement of liquidation proceedings", fontweight="bold")
-    plt.xlabel("Days sinces July", fontweight="bold")
+    plt.xlabel("Months", fontweight="bold")
 
     plt.savefig("output.pdf")
 
