@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 """Bankcrypties based on covid illustrated"""
 
+import concurrent.futures
+from pprint import pprint
 import requests
 from bs4 import BeautifulSoup as bs
 from matplotlib.lines import Line2D
@@ -18,8 +20,9 @@ def html2soup(html):
     return bs(html, "html.parser")
 
 
-def scrape(url, _s):
+def scrape(args):
     """Web scrape url and generate data frame"""
+    [url, _s] = args
     html = url2html(url, _s)
     soup = html2soup(html)
     # Grab the table with the data
@@ -36,17 +39,11 @@ def scrape(url, _s):
             _c = tds[1].text.strip()
             if not _c == "Utenlands":
                 county = _c
-                data[county] = [list(range(1, 13)), [-1 for i in range(12)]]
+                data[county] = 0
                 continue
         if len(tds) < 3:
             continue
-
-        month = int(tds[5].text.strip().split(".")[1])
-        data[county][1][month] += 1
-
-    for key in data:
-        data[key] = [[it, val] for it, val in enumerate(data[key][1]) if not val == -1]
-        data[key] = list(map(list, zip(*data[key])))
+        data[county] += 1
 
     return data
 
@@ -56,17 +53,75 @@ def gen_url(_from, _to):
            "datoFra=" + _from + "&datoTil=" + _to + "&" \
            "id_region=0&id_niva1=51&id_niva2=-+-+-&id_bransje1=0"
 
+
+def concurrent_scrape(urls, session):
+    """Concurrently scrape"""
+    futures = []
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        for url in urls:
+            futures.append([url[0], executor.submit(scrape, [url[1], session])])
+    return [[f[0], f[1].result()] for f in futures]
+
+
+def convert_scraped_data(scraped):
+    """Convert scraped data"""
+    result = {}
+    for _m in scraped:
+        month = _m[0]
+        for key, val in _m[1].items():
+            if key not in result:
+                result[key] = [[month], [val]]
+            else:
+                result[key][0].append(month)
+                result[key][1].append(val)
+    return result
+
+
 def get_data():
     """Scrape data from url"""
 
-    url_2019 = gen_url("01.03.2019", "31.05.2019")
-    url_2020 = gen_url("01.05.2020", "31.05.2020")
+    dates_2019 = [
+        ["01.01.2019", "31.01.2019"],
+        ["01.02.2019", "28.02.2019"],
+        ["01.03.2019", "31.03.2019"],
+        ["01.04.2019", "30.04.2019"],
+        ["01.05.2019", "31.05.2019"],
+        ["01.06.2019", "30.06.2019"],
+        ["01.07.2019", "31.07.2019"],
+        ["01.08.2019", "31.08.2019"],
+        ["01.09.2019", "30.09.2019"],
+        ["01.10.2019", "31.10.2019"],
+        ["01.11.2019", "30.11.2019"],
+        ["01.12.2019", "31.12.2019"]
+    ]
+
+    dates_2020 = [
+        ["01.01.2020", "31.01.2020"],
+        ["01.02.2020", "29.02.2020"],
+        ["01.03.2020", "31.03.2020"],
+        ["01.04.2020", "30.04.2020"],
+        ["01.05.2020", "31.05.2020"],
+        ["01.06.2020", "30.06.2020"],
+        ["01.07.2020", "31.07.2020"],
+        ["01.08.2020", "31.08.2020"],
+        ["01.09.2020", "30.09.2020"],
+        ["01.10.2020", "15.10.2020"],
+    ]
+
+    urls_2019 = [[it + 1, gen_url(*date)] for it, date in enumerate(dates_2019)]
+    urls_2020 = [[it + 1, gen_url(*date)] for it, date in enumerate(dates_2020)]
 
     # Initialize requests session
     session = requests.session()
 
-    data2019 = scrape(url_2019, session)
-    data2020 = scrape(url_2020, session)
+    data = concurrent_scrape(urls_2019, session)
+    data2019 = convert_scraped_data(data)
+
+    data = concurrent_scrape(urls_2020, session)
+    data2020 = convert_scraped_data(data)
+
+    pprint(data2019)
+    pprint(data2020)
 
     return [data2019, data2020]
 
