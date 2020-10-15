@@ -134,6 +134,7 @@ def plot_graph(data2019, data2020):
     fig.add_subplot(111, frame_on=False)
     fig.tight_layout()
     plt.tick_params(labelcolor="none", top=False, bottom=False, left=False, right=False)
+    plt.setp(axes, xticks=range(1, 12, 2))
 
     legend_handles = [Line2D([0], [0], color="orange", lw=2, label="2019"),
                       Line2D([0], [0], color="cyan", lw=2, label="2020")]
@@ -141,7 +142,7 @@ def plot_graph(data2019, data2020):
 
     plt.suptitle("Commencement of liquidation proceedings of 2019-2020", fontweight="bold")
     plt.ylabel("Commencement of liquidation proceedings", fontweight="bold")
-    plt.xlabel("Months", fontweight="bold")
+    plt.xlabel("Month", fontweight="bold")
 
     plt.savefig("output.pdf")
 
