@@ -47,8 +47,8 @@ $ Rscript main.R
 
 ## Info
 
-### Assignment text
+### Assignment 3 - 5 text
 [https://docs.google.com/document/d/e/2PACX-1vR5-04Rn2GmHmoWuvMrsFlnq6mp_ZrMmw7WvO9vXASew4S6KffgOl3tm7Xx4fvsUiNu6chz6q84Dab-/pub](https://docs.google.com/document/d/e/2PACX-1vR5-04Rn2GmHmoWuvMrsFlnq6mp_ZrMmw7WvO9vXASew4S6KffgOl3tm7Xx4fvsUiNu6chz6q84Dab-/pub)
 
-### Deadline assignment 3 - 5
-Monday by 12pm
+### Assignment 6 text
+[https://docs.google.com/document/d/e/2PACX-1vRbl3j-35rRKn_0w9acwETOkRgVFzyy9YEVfPVvuRY6RMlDCbKlzZJZ3Yrr_e21C4NNeD2dZOoKHYo7/pub](https://docs.google.com/document/d/e/2PACX-1vRbl3j-35rRKn_0w9acwETOkRgVFzyy9YEVfPVvuRY6RMlDCbKlzZJZ3Yrr_e21C4NNeD2dZOoKHYo7/pub)
