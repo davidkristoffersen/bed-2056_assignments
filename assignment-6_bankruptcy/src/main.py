@@ -40,7 +40,8 @@ def scrape(args):
                 continue
         if len(tds) < 3:
             continue
-        data[county] += 1
+        if tds[-2].a.text.strip() == "Konkursåpning":
+            data[county] += 1
     return data
 
 
