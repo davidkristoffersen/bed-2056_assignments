@@ -2,7 +2,6 @@
 """Bankcrypties based on covid illustrated"""
 
 import concurrent.futures
-from pprint import pprint
 import requests
 from bs4 import BeautifulSoup as bs
 from matplotlib.lines import Line2D
@@ -44,8 +43,8 @@ def scrape(args):
         if len(tds) < 3:
             continue
         data[county] += 1
-
     return data
+
 
 def gen_url(_from, _to):
     """Dynamically generate url"""
@@ -120,10 +119,8 @@ def get_data():
     data = concurrent_scrape(urls_2020, session)
     data2020 = convert_scraped_data(data)
 
-    pprint(data2019)
-    pprint(data2020)
-
     return [data2019, data2020]
+
 
 def plot_graph(data2019, data2020):
     """Plot multi-graph"""
@@ -150,6 +147,7 @@ def plot_graph(data2019, data2020):
     plt.xlabel("Months", fontweight="bold")
 
     plt.savefig("output.pdf")
+
 
 if __name__ == "__main__":
     plot_graph(*get_data())
