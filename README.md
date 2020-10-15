@@ -45,6 +45,13 @@ $ cd assignment-5_ssb-api
 $ Rscript main.R
 ```
 
+### Assignment 6
+```bash
+$ cd assignment-6_bankruptcy/src
+$ python3 main.py
+$ Rscript main.R
+```
+
 ## Info
 
 ### Assignment 3 - 5 text
