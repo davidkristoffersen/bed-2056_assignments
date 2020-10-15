@@ -24,9 +24,7 @@ def scrape(args):
     [url, _s] = args
     html = url2html(url, _s)
     soup = html2soup(html)
-    # Grab the table with the data
     table = soup.find_all('table')[3]
-    # Get the data within the table
     table = table.find_all("td")[0].find_all("tr")[5:]
 
     data = {}
@@ -110,7 +108,6 @@ def get_data():
     urls_2019 = [[it + 1, gen_url(*date)] for it, date in enumerate(dates_2019)]
     urls_2020 = [[it + 1, gen_url(*date)] for it, date in enumerate(dates_2020)]
 
-    # Initialize requests session
     session = requests.session()
 
     data = concurrent_scrape(urls_2019, session)
