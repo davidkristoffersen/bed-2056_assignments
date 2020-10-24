@@ -1,0 +1,9 @@
+---
+title: "Assignment 7 - US birth rates"
+author: "David Kristoffersen"
+output:
+  html_document:
+    df_print: paged
+---
+
+![](./output.pdf){width=100% height=1000}
