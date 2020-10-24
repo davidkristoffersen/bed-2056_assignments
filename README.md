@@ -52,6 +52,13 @@ $ python3 main.py
 $ Rscript main.R
 ```
 
+### Assignment 7
+```bash
+$ cd assignment-7_us-births
+$ python3 main.py
+$ Rscript main.R
+```
+
 ## Info
 
 ### Assignment 3 - 5 text
